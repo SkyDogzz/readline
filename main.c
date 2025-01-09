@@ -12,9 +12,6 @@
 
 #include "inc.h"
 
-/*
-* Oui
-*/
 static void	ft_signal_handler(int signal)
 {
 	if (signal == SIGINT)
@@ -33,33 +30,26 @@ void	set_signal_action(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int	main(int argc, char *argv[])
+int	main(void)
 {
 	char	*line;
-	int		count;
 
-	count = 1;
 	set_signal_action();
-	line = readline("Retreive line: ");
-	add_history(line);
 	while (1)
 	{
-		if (*line == EOF)
-		{
-			printf("EOF here\n");
-		}
-		if (strcmp(line, "exit") == 0)
+		line = readline("Retreive line: ");
+		if (!line)
+			break;
+		else if (strcmp(line, "exit") == 0)
 		{
 			free(line);
-			exit(EXIT_SUCCESS);
+			break;
 		}
+		if (strcmp(line, "") != 0)
+			add_history(line);
 		free(line);
-		line = readline("Retreive line: ");
-		add_history(line);
 	}
-	free(line);
 	rl_clear_history();
+	printf("exit\n");
 	return (EXIT_SUCCESS);
-	(void) argc;
-	(void) argv;
 }
